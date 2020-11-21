@@ -19,12 +19,14 @@ class CollectionPage extends StatelessWidget {
           child: Row(
             children: [
               Icon(
+                
                 Icons.person_rounded,
                 color: Colors.black87,
+                size: 18,
               ),
               Text(
-                'Log In / Sign Up',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w300),
+                'Log In/Sign Up',
+                style: TextStyle(fontSize: 10, fontWeight: FontWeight.w300),
               )
             ],
           ),

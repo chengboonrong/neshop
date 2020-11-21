@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:neshop/utils/game.dart';
 import 'package:http/http.dart' as http;
@@ -110,6 +111,7 @@ Future<List<Game>> fetchGameList(type) async {
   );
   // var list = jsonDecode(response.body)['contents'];
   var list = jsonDecode(utf8.decode(response.bodyBytes))['contents'];
+  // print(list);
 
   list.forEach((game) async {
     var ss = List<String>();
@@ -130,23 +132,49 @@ Future<List<Game>> fetchGameList(type) async {
       descriptors.add(d['name']);
     });
 
-    // print(descriptors);
+    var releaseDate = game['release_date_on_eshop'];
 
     _gameList.add(
       Game(
         gameID: game['id'].toString(),
         formalName: game['formal_name'],
-        heroBannerUrl: game['hero_banner_url'],
+        // heroBannerUrl: game['hero_banner_url'],
+        heroImage: Image.network(
+          game['hero_banner_url'],
+          fit: BoxFit.fitWidth,
+          frameBuilder: (BuildContext context, Widget child, int frame,
+                  bool wasSynchronouslyLoaded) =>
+              wasSynchronouslyLoaded
+                  ? child
+                  : AnimatedOpacity(
+                      child: child,
+                      opacity: frame == null ? 0 : 1,
+                      duration: const Duration(seconds: 2),
+                      curve: Curves.easeOut,
+                    ),
+          loadingBuilder: (context, child, progress) => progress == null
+              ? child
+              : Center(
+                  child: LinearProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(Colors.blueAccent),
+                  ),
+                ),
+          errorBuilder:
+              (BuildContext context, Object exception, StackTrace stackTrace) =>
+                  Text('Failed to load image'),
+        ),
         dominantColors: clrs,
         screenshots: ss,
         ratingImageURL: ratingImageURL,
         descriptors: descriptors,
+        releaseDate: releaseDate,
       ),
     );
   });
 
   // print(_gameList.length);
-  print('New: Loaded');
+  print('Loaded');
 
   _gameList.sort((a, b) {
     return a.formalName
@@ -158,17 +186,56 @@ Future<List<Game>> fetchGameList(type) async {
   return _gameList;
 }
 
+Future<String> fetchPrice(uid) async {
+  var redirectUrL =
+      'https://graph.nintendo.com/?operationName=GetGameByNsuidForPosRedirect&variables={"nsuid":"$uid","locale":"en-US"}&extensions={"persistedQuery":{"version":1,"sha256Hash":"070b5ce2d75804dfde87bbd842aa4549043f0959a047a5e123f2a677e8f9c0b3"}}';
+  var _response = await http.get(redirectUrL);
+
+  /////// If that is not a game but something like a DLC //////////////////////
+  if (json.decode(_response.body)['data']['game'] == null) return null;
+  ////////////////////////////////////////////////////////////////////////////
+
+  var gameDetailURL = json.decode(_response.body)['data']['game']['detailPage'];
+  var document;
+  await http.get(Uri.parse(gameDetailURL)).then((resp) {
+    document = parse(resp.body);
+  });
+
+  final _price = document
+      .getElementsByClassName('price')
+      .first
+      .children
+      .last
+      .innerHtml
+      .trim();
+
+  return _price;
+}
+
 Future<GameInfo> fetchGameInfo(uid) async {
   var _gameInfo = GameInfo();
 
   var redirectUrL =
       'https://graph.nintendo.com/?operationName=GetGameByNsuidForPosRedirect&variables={"nsuid":"$uid","locale":"en-US"}&extensions={"persistedQuery":{"version":1,"sha256Hash":"070b5ce2d75804dfde87bbd842aa4549043f0959a047a5e123f2a677e8f9c0b3"}}';
   var _response = await http.get(redirectUrL);
+
+  /////// If that is not a game but something like a DLC //////////////////////
+  if (json.decode(_response.body)['data']['game'] == null) return null;
+  ////////////////////////////////////////////////////////////////////////////
+
   var gameDetailURL = json.decode(_response.body)['data']['game']['detailPage'];
   var document;
   await http.get(Uri.parse(gameDetailURL)).then((resp) {
     document = parse(resp.body);
   });
+
+  final _price = document
+      .getElementsByClassName('price')
+      .first
+      .children
+      .last
+      .innerHtml
+      .trim();
 
   final rd = document.getElementsByClassName('release-date').first.text;
   final ply = document.getElementsByClassName('players').first.text;
@@ -240,6 +307,7 @@ Future<GameInfo> fetchGameInfo(uid) async {
     lang: sl.split(':')[1].trim() ?? '',
     spMode: spMode,
     nso: nso,
+    price: _price,
   );
 
   return _gameInfo;
@@ -249,7 +317,7 @@ Future<Price> fetchGamePrice(gameID, toCurrency, country) async {
   var priceUrl =
       'https://api.ec.nintendo.com/v1/price?country=$country&ids=$gameID&lang=en';
 
-  print(priceUrl);
+  // print(priceUrl);
 
   var _response = await http.get(priceUrl);
   var document = await jsonDecode(utf8.decode(_response.bodyBytes));
@@ -259,23 +327,26 @@ Future<Price> fetchGamePrice(gameID, toCurrency, country) async {
   var fromCurrency;
   if (document['prices'][0]['sales_status'] == 'onsale') {
     fromCurrency = document['prices'][0]['regular_price']['currency'];
-    print(document);
+    // print(document);
 
     var rp, dp, crp, cdp;
 
     await currencyConvert(fromCurrency, toCurrency).then((rate) {
       rp = document['prices'][0]['regular_price']['amount'];
-      if (document['prices'][0]['discount_price'] != null)  {
-
-      dp = document['prices'][0]['discount_price']['amount'];
-      cdp = (rate * double.parse(document['prices'][0]['discount_price']['raw_value'])).toStringAsFixed(2);
-
+      if (document['prices'][0]['discount_price'] != null) {
+        dp = document['prices'][0]['discount_price']['amount'];
+        cdp = (rate *
+                double.parse(
+                    document['prices'][0]['discount_price']['raw_value']))
+            .toStringAsFixed(2);
       } else {
         dp = '0.0';
         cdp = '0.0';
       }
-      
-      crp = (rate * double.parse(document['prices'][0]['regular_price']['raw_value'])).toStringAsFixed(2);
+
+      crp = (rate *
+              double.parse(document['prices'][0]['regular_price']['raw_value']))
+          .toStringAsFixed(2);
 
       rate < 0
           ? price = Price(
@@ -287,8 +358,7 @@ Future<Price> fetchGamePrice(gameID, toCurrency, country) async {
               regularPrice: rp,
               discountPrice: dp,
               convRegularPrice: crp,
-              convDiscountPrice: cdp
-            );
+              convDiscountPrice: cdp);
     });
   } else if (document['prices'][0]['sales_status'] == 'unreleased') {
     price = Price(

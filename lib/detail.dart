@@ -11,11 +11,13 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 // import 'package:video_player/video_player.dart';
 
 class DetailPage extends StatefulWidget {
+  final String from;
   final int index;
   final String gameID;
   final String formalName;
 
-  final String heroBannerUrl;
+  // final String heroBannerUrl;
+  final Image heroImage;
   final List<String> dominantColors;
   final List<String> screenShots;
   final String ratingImageURL;
@@ -23,10 +25,12 @@ class DetailPage extends StatefulWidget {
 
   DetailPage({
     Key key,
+    @required this.from,
     @required this.gameID,
     @required this.index,
     @required this.formalName,
-    @required this.heroBannerUrl,
+    // @required this.heroBannerUrl,
+    @required this.heroImage,
     @required this.dominantColors,
     @required this.screenShots,
     @required this.ratingImageURL,
@@ -122,7 +126,7 @@ class _DetailPageState extends State<DetailPage> {
                     color: Colors.transparent,
                     child: Container(
                       child: Hero(
-                        tag: 'game-${widget.index}',
+                        tag: '${widget.from}game-${widget.index}',
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -130,11 +134,12 @@ class _DetailPageState extends State<DetailPage> {
                               flex: 2,
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 40),
-                                child: Image.network(
-                                  widget.heroBannerUrl,
-                                  width:
-                                      MediaQuery.of(context).size.width / 1.1,
-                                ),
+                                child: widget.heroImage,
+                                // Image.network(
+                                //   widget.heroBannerUrl,
+                                //   width:
+                                //       MediaQuery.of(context).size.width / 1.1,
+                                // ),
                               ),
                             ),
                           ],
@@ -278,41 +283,39 @@ class _DetailPageState extends State<DetailPage> {
                         (!isLoading)
                             ? Expanded(
                                 flex: 2,
-                                child: 
-                                Container(
+                                child: Container(
                                   margin: const EdgeInsets.only(top: 16),
                                   child: Text.rich(
-                                  TextSpan(
-                                    text: priceByCountries[0]
-                                                ?.convDiscountPrice !=
-                                            '0.0'
-                                        ? priceByCountries[0]
-                                            ?.convDiscountPrice
-                                          
-                                        : priceByCountries[0]
-                                            ?.convRegularPrice
-                                            ,
-                                    style: TextStyle(
-                                        color: Colors.orange,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 22),
-                                    children: <TextSpan>[
-                                      TextSpan(
-                                          text: priceByCountries[0]
-                                                      .convDiscountPrice ==
-                                                  '0.0'
-                                              ? ''
-                                              : '\n${priceByCountries[0]?.convRegularPrice}',
-                                          style: TextStyle(
-                                              decoration:
-                                                  TextDecoration.lineThrough,
-                                              color: Colors.black54,
-                                              fontStyle: FontStyle.italic,
-                                              fontSize: 20)),
-                                    ],
+                                    TextSpan(
+                                      text: priceByCountries[0]
+                                                  ?.convDiscountPrice !=
+                                              '0.0'
+                                          ? priceByCountries[0]
+                                              ?.convDiscountPrice
+                                          : priceByCountries[0]
+                                              ?.convRegularPrice,
+                                      style: TextStyle(
+                                          color: Colors.orange,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 22),
+                                      children: <TextSpan>[
+                                        TextSpan(
+                                            text: priceByCountries[0]
+                                                        .convDiscountPrice ==
+                                                    '0.0'
+                                                ? ''
+                                                : '\n${priceByCountries[0]?.convRegularPrice}',
+                                            style: TextStyle(
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                                color: Colors.black54,
+                                                fontStyle: FontStyle.italic,
+                                                fontSize: 20)),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),)
+                              )
                             : Expanded(
                                 flex: 2,
                                 child:
@@ -341,18 +344,20 @@ class _DetailPageState extends State<DetailPage> {
               Container(
                 height: MediaQuery.of(context).size.height / 3,
                 color: Color(int.parse(
-                    '0xff${widget.dominantColors.isNotEmpty ? widget.dominantColors[1] : defaultColors[0]}')),
+                    '0xff${widget.dominantColors.isNotEmpty ? widget.dominantColors[2] : defaultColors[0]}')),
                 child: ImagesScrollView(screenShots: widget.screenShots),
               ),
 
               // Game info
-              (gameInfo?.publisher?.isNotEmpty ?? false)
-                  ? gameInfoWidget(context, gameInfo, widget.ratingImageURL,
-                      widget.descriptors)
-                  : Container(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: CircularProgressIndicator(),
-                    ),
+              gameInfo != null
+                  ? (gameInfo?.publisher?.isNotEmpty ?? false)
+                      ? gameInfoWidget(context, gameInfo, widget.ratingImageURL,
+                          widget.descriptors)
+                      : Container(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: CircularProgressIndicator(),
+                        )
+                  : Container(),
             ],
           ),
         ),

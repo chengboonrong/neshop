@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:neshop/detail.dart';
+import 'package:neshop/utils/dateFormat.dart';
 import 'package:neshop/utils/game.dart';
 import 'package:neshop/utils/fetch.dart';
 
@@ -29,19 +30,21 @@ class NewPageState extends State<NewPage> {
     fetchGameList('new').then((games) {
       setState(() {
         gameList.addAll(games);
+        print(gameList.length);
         isLoading = false;
       });
     });
   }
 
-  _openDetail(context, index, id, name, imageURL, colors, screenshots, rImage,
-      descrips) {
+  _openDetail(
+      context, index, id, name, image, colors, screenshots, rImage, descrips) {
     final route = CupertinoPageRoute(
       builder: (context) => DetailPage(
+          from: 'new',
           index: index,
           gameID: id,
           formalName: name,
-          heroBannerUrl: imageURL,
+          heroImage: image,
           dominantColors: colors,
           screenShots: screenshots,
           ratingImageURL: rImage,
@@ -62,38 +65,48 @@ class NewPageState extends State<NewPage> {
           ),
           child: isLoading
               ? Center(child: CircularProgressIndicator())
-              : ListView.builder(
+              : GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0,
+                  ),
                   itemCount: gameList.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      contentPadding: const EdgeInsets.all(10),
-                      onTap: () => _openDetail(
-                          context,
-                          index,
-                          gameList[index].gameID,
-                          gameList[index].formalName,
-                          gameList[index].heroBannerUrl,
-                          gameList[index].dominantColors,
-                          gameList[index].screenshots,
-                          gameList[index].ratingImageURL,
-                          gameList[index].descriptors),
-                      isThreeLine: true,
-                      subtitle: Text(''),
-                      leading: Hero(
-                        tag: 'newgame-$index',
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.0),
-                          child: CachedNetworkImage(
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            imageUrl: gameList[index].heroBannerUrl,
-                            fit: BoxFit.cover,
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                          ),
-                        ),
+                    return Container(
+                      margin: const EdgeInsets.all(4),
+                      child: InkWell(
+                        onTap: () => _openDetail(
+                            context,
+                            index,
+                            gameList[index].gameID,
+                            gameList[index].formalName,
+                            gameList[index].heroImage,
+                            gameList[index].dominantColors,
+                            gameList[index].screenshots,
+                            gameList[index].ratingImageURL,
+                            gameList[index].descriptors),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Hero(
+                                tag: 'newgame-$index',
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: gameList[index].heroImage,
+                                ),
+                              ),
+                              Text(
+                                convertDateFromString(
+                                    gameList[index].releaseDate),
+                                style: TextStyle(fontWeight: FontWeight.w300),
+                              ),
+                              Text(gameList[index].formalName.trim(),
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                            ]),
                       ),
-                      title: Text('${gameList[index].formalName}'),
                     );
                   },
                 ),

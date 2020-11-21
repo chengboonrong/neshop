@@ -1,22 +1,27 @@
+import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
 class Game {
   String gameID;
   String formalName;
-  String heroBannerUrl;
+  // String heroBannerUrl;
+  Image heroImage;
   List<String> dominantColors;
   List<String> screenshots;
   String ratingImageURL;
   List<String> descriptors;
+  String releaseDate;
 
   Game(
       {this.gameID,
       this.formalName,
-      this.heroBannerUrl,
+      // this.heroBannerUrl,
+      this.heroImage,
       this.dominantColors,
       this.screenshots,
       this.ratingImageURL,
-      this.descriptors});
+      this.descriptors,
+      this.releaseDate});
 }
 
 class GameInfo {
@@ -30,6 +35,7 @@ class GameInfo {
   String lang;
   List<Tuple2> spMode;
   List<String> nso;
+  String price;
 
   GameInfo(
       {this.videoID,
@@ -40,7 +46,8 @@ class GameInfo {
       this.gameFileSize,
       this.lang,
       this.spMode,
-      this.nso});
+      this.nso,
+      this.price});
 }
 
 class Price {

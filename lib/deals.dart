@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:neshop/detail.dart';
 import 'package:neshop/utils/game.dart';
 import 'package:neshop/utils/fetch.dart';
+import 'package:neshop/utils/dateFormat.dart';
 
 class DealsPage extends StatefulWidget {
   final List<double> rates;
@@ -34,14 +35,16 @@ class DealsPageState extends State<DealsPage> {
     });
   }
 
-  _openDetail(context, index, id, name, imageURL, colors, screenshots, rImage,
-      descrips) {
+  void _openDetail(
+      context, index, id, name, image, colors, screenshots, rImage, descrips) {
     final route = CupertinoPageRoute(
       builder: (context) => DetailPage(
+        from: 'deals',
         index: index,
         gameID: id,
         formalName: name,
-        heroBannerUrl: imageURL,
+        // heroBannerUrl: imageURL,
+        heroImage: image,
         dominantColors: colors,
         screenShots: screenshots,
         ratingImageURL: rImage,
@@ -55,48 +58,60 @@ class DealsPageState extends State<DealsPage> {
   Widget build(BuildContext context) {
     return CupertinoApp(
       debugShowCheckedModeBanner: false,
-      home: CupertinoPageScaffold(
-        navigationBar: CupertinoNavigationBar(
-          transitionBetweenRoutes: false,
-          middle: Text('Deals'),
-        ),
-        child: isLoading
-            ? Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: gameList.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    contentPadding: const EdgeInsets.all(10),
-                    onTap: () => _openDetail(
-                        context,
-                        index,
-                        gameList[index].gameID,
-                        gameList[index].formalName,
-                        gameList[index].heroBannerUrl,
-                        gameList[index].dominantColors,
-                        gameList[index].screenshots,
-                        gameList[index].ratingImageURL,
-                        gameList[index].descriptors),
-                    isThreeLine: true,
-                    subtitle: Text(''),
-                    leading: Hero(
-                      tag: 'dealsgame-$index',
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.0),
-                        child: CachedNetworkImage(
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          imageUrl: gameList[index].heroBannerUrl,
-                          fit: BoxFit.cover,
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
-                        ),
+      home: Scaffold(
+        body: CupertinoPageScaffold(
+          navigationBar: CupertinoNavigationBar(
+            transitionBetweenRoutes: false,
+            middle: Text('Deals'),
+          ),
+          child: isLoading
+              ? Center(child: CircularProgressIndicator())
+              : GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 10.0,
+                  ),
+                  itemCount: gameList.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: const EdgeInsets.all(4),
+                      child: InkWell(
+                        onTap: () => _openDetail(
+                            context,
+                            index,
+                            gameList[index].gameID,
+                            gameList[index].formalName,
+                            gameList[index].heroImage,
+                            gameList[index].dominantColors,
+                            gameList[index].screenshots,
+                            gameList[index].ratingImageURL,
+                            gameList[index].descriptors),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Hero(
+                                tag: 'dealsgame-$index',
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: gameList[index].heroImage,
+                                ),
+                              ),
+                              Text(
+                                convertDateFromString(
+                                    gameList[index].releaseDate),
+                                style: TextStyle(fontWeight: FontWeight.w300),
+                              ),
+                              Text(gameList[index].formalName.trim(),
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
+                            ]),
                       ),
-                    ),
-                    title: Text('${gameList[index].formalName}'),
-                  );
-                },
-              ),
+                    );
+                  },
+                ),
+        ),
       ),
     );
   }
