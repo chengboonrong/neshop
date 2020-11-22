@@ -1,5 +1,5 @@
 # Neshop
-Inspired by 游戏盒子Gamebox, to make a English version of that. \n
+Inspired by 游戏盒子Gamebox, to make a English version of that. <br>
 Default Nintendo region : US.
 
 ## A Nintendo Eshop on mobile
