@@ -155,10 +155,15 @@ Future<List<Game>> fetchGameList(type) async {
           loadingBuilder: (context, child, progress) => progress == null
               ? child
               : Center(
-                  child: LinearProgressIndicator(
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(Colors.blueAccent),
+                  child: Image.asset(
+                    'lib/assets/images/ns-logo.png',
+                    height: 100,
+                    width: 80,
                   ),
+                  // LinearProgressIndicator(
+                  //   valueColor:
+                  //       AlwaysStoppedAnimation<Color>(Colors.blueAccent),
+                  // ),
                 ),
           errorBuilder:
               (BuildContext context, Object exception, StackTrace stackTrace) =>

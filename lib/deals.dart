@@ -75,8 +75,8 @@ class DealsPageState extends State<DealsPage> {
               : GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 4.0,
+                    mainAxisSpacing: 4.0,
                   ),
                   itemCount: gameList.length,
                   itemBuilder: (context, index) {
@@ -97,11 +97,13 @@ class DealsPageState extends State<DealsPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Hero(
-                                tag: 'dealsgame-$index',
+                              Container(
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8.0),
-                                  child: gameList[index].heroImage,
+                                  child: Hero(
+                                    tag: 'dealsgame-$index',
+                                    child: gameList[index].heroImage,
+                                  ),
                                 ),
                               ),
                               Text(

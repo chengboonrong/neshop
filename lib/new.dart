@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:neshop/detail.dart';
+import 'package:neshop/provider/newProvider.dart';
 import 'package:neshop/utils/dateFormat.dart';
 import 'package:neshop/utils/game.dart';
 import 'package:neshop/utils/fetch.dart';
+import 'package:provider/provider.dart';
 
 class NewPage extends StatefulWidget {
   final List<double> rates;
@@ -28,9 +30,15 @@ class NewPageState extends State<NewPage> {
     });
 
     fetchGameList('new').then((games) {
+      Provider.of<NewGameListProvider>(context, listen: false)
+          .addNewGames(games);
+
       setState(() {
         gameList.addAll(games);
-        print(gameList.length);
+        // print(gameList.length);
+      });
+    }).whenComplete(() {
+      setState(() {
         isLoading = false;
       });
     });
@@ -55,6 +63,10 @@ class NewPageState extends State<NewPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Game> newGameList =
+        Provider.of<NewGameListProvider>(context, listen: false).getNewGameList;
+    print('From provider: ${newGameList.length}');
+
     return CupertinoApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
@@ -77,8 +89,8 @@ class NewPageState extends State<NewPage> {
               : GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
-                    crossAxisSpacing: 10.0,
-                    mainAxisSpacing: 10.0,
+                    crossAxisSpacing: 4.0,
+                    mainAxisSpacing: 4.0,
                   ),
                   itemCount: gameList.length,
                   itemBuilder: (context, index) {
@@ -99,19 +111,21 @@ class NewPageState extends State<NewPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Hero(
-                                tag: 'newgame-$index',
+                              Container(
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8.0),
-                                  child: gameList[index].heroImage,
+                                  child: Hero(
+                                    tag: 'newgame-$index',
+                                    child: newGameList[index].heroImage,
+                                  ),
                                 ),
                               ),
                               Text(
                                 convertDateFromString(
-                                    gameList[index].releaseDate),
+                                    newGameList[index].releaseDate),
                                 style: TextStyle(fontWeight: FontWeight.w300),
                               ),
-                              Text(gameList[index].formalName.trim(),
+                              Text(newGameList[index].formalName.trim(),
                                   overflow: TextOverflow.ellipsis,
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold)),
