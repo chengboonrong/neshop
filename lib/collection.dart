@@ -7,7 +7,16 @@ class CollectionPage extends StatelessWidget {
     return Scaffold(
       appBar: CupertinoNavigationBar(
         transitionBetweenRoutes: false,
-        middle: Text('Collection'),
+        middle: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Icon(
+              Icons.favorite_border_outlined,
+              color: Colors.black,
+            ),
+            Text('\tCollection'),
+          ],
+        ),
         leading: InkWell(
           onTap: () {
             Navigator.push(
@@ -19,7 +28,6 @@ class CollectionPage extends StatelessWidget {
           child: Row(
             children: [
               Icon(
-                
                 Icons.person_rounded,
                 color: Colors.black87,
                 size: 18,

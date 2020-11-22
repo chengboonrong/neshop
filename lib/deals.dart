@@ -62,7 +62,13 @@ class DealsPageState extends State<DealsPage> {
         body: CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
             transitionBetweenRoutes: false,
-            middle: Text('Deals'),
+            middle: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.local_offer_outlined, color: Colors.black),
+                Text('\tDeals'),
+              ],
+            ),
           ),
           child: isLoading
               ? Center(child: CircularProgressIndicator())

@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.local_offer_rounded),
               label: 'Search'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.local_offer_outlined), label: 'Collection'),
+              icon: Icon(Icons.favorite_border_outlined), label: 'Collection'),
           BottomNavigationBarItem(
               icon: Icon(Icons.settings_outlined), label: 'Settings'),
         ],

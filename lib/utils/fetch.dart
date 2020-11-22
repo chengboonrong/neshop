@@ -362,15 +362,15 @@ Future<Price> fetchGamePrice(gameID, toCurrency, country) async {
     });
   } else if (document['prices'][0]['sales_status'] == 'unreleased') {
     price = Price(
-        regularPrice: document['prices'][0]['sales_status'],
+        regularPrice: '----------', // document['prices'][0]['sales_status'],
         discountPrice: '0.0',
-        convRegularPrice: document['prices'][0]['sales_status'],
+        convRegularPrice: '----------', //document['prices'][0]['sales_status'],
         convDiscountPrice: '0.0');
   } else {
     price = Price(
-        regularPrice: document['prices'][0]['sales_status'],
+        regularPrice: '----------', //document['prices'][0]['sales_status'],
         discountPrice: '0.0',
-        convRegularPrice: document['prices'][0]['sales_status'],
+        convRegularPrice: '----------', //document['prices'][0]['sales_status'],
         convDiscountPrice: '0.0');
 
     // var priceUrl =

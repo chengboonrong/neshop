@@ -45,7 +45,7 @@ class _TablePricePageState extends State<TablePricePage> {
   @override
   void initState() {
     super.initState();
-    print(widget.prices.length);
+    // print(widget.prices.length);
   }
 
   TableRow _tableRow(Country _country, Price _price, Country _countrySettings) {
@@ -71,32 +71,31 @@ class _TablePricePageState extends State<TablePricePage> {
             ]),
           ),
           Expanded(
-            flex: 4,
+            flex: 3,
             child: _price.discountPrice != '0.0'
                 ? Column(
                     children: [
                       Text(
                         '${_price.discountPrice}',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
                       Text(
                         '${_price.regularPrice}',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 12,
                           decoration: TextDecoration.lineThrough,
                         ),
                       ),
                     ],
                   )
                 : Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         '${_price.regularPrice}',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
                     ],
@@ -111,13 +110,13 @@ class _TablePricePageState extends State<TablePricePage> {
                       Text(
                         '${_countrySettings.currencyCode} ${_price.convDiscountPrice}',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                         ),
                       ),
                       Text(
                         '${_countrySettings.currencyCode} ${_price.convRegularPrice}',
                         style: TextStyle(
-                          fontSize: 14,
+                          fontSize: 12,
                           decoration: TextDecoration.lineThrough,
                         ),
                       ),
@@ -125,9 +124,9 @@ class _TablePricePageState extends State<TablePricePage> {
                   )
                 : Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                     Text(
-                      '${_price.convRegularPrice}',
+                      '${_countrySettings.currencyCode} ${_price.convRegularPrice}',
                       style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 16,
                       ),
                     ),
                   ]),
@@ -141,7 +140,7 @@ class _TablePricePageState extends State<TablePricePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CupertinoNavigationBar(
-        middle: Text("Game Title"),
+        middle: Text(widget.gameTitle),
         backgroundColor: Colors.white,
       ),
       body: widget.prices.length == 0

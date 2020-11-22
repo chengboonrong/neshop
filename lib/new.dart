@@ -61,7 +61,16 @@ class NewPageState extends State<NewPage> {
         body: CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
             transitionBetweenRoutes: false,
-            middle: Text('New'),
+            middle: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.new_releases_outlined,
+                  color: Colors.black,
+                ),
+                Text('\tNew'),
+              ],
+            ),
           ),
           child: isLoading
               ? Center(child: CircularProgressIndicator())
@@ -103,6 +112,7 @@ class NewPageState extends State<NewPage> {
                                 style: TextStyle(fontWeight: FontWeight.w300),
                               ),
                               Text(gameList[index].formalName.trim(),
+                                  overflow: TextOverflow.ellipsis,
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold)),
                             ]),

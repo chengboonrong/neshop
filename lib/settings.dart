@@ -103,7 +103,13 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CupertinoNavigationBar(
-        middle: Text("Settings"),
+        middle: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.settings_outlined),
+            Text("\tSettings"),
+          ],
+        ),
       ),
       body: Container(
         child: Column(
