@@ -1,4 +1,7 @@
 # Neshop
+Inspired by 游戏盒子Gamebox, to make a English version of that.
+Default Nintendo region : US.
+
 ## A Nintendo Eshop on mobile
 
 - [ ] Tested on Android phone
