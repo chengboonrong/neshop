@@ -69,10 +69,7 @@ class _CollectionState extends State<Collection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child:
-
-          // Text('No collection'),
-          GridView.builder(
+      child: GridView.builder(
         itemCount: favGames.length,
         gridDelegate:
             new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),

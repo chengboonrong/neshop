@@ -50,8 +50,8 @@ class _DetailPageState extends State<DetailPage> {
   String countryCode = '';
   Country country = CurrencyPickerUtils.getCountryByIsoCode('US');
 
-  VideoPlayerController _controller;
-  Future<void> _initializeVideoPlayerFuture;
+  // VideoPlayerController _controller;
+  // Future<void> _initializeVideoPlayerFuture;
 
   List<Price> priceByCountries = List<Price>();
 
@@ -277,16 +277,17 @@ class _DetailPageState extends State<DetailPage> {
                         Container(
                             padding: const EdgeInsets.only(left: 20),
                             child: Container(
-                              width: 100,
+                              width: MediaQuery.of(context).size.width / 3,
                               height: 4,
                               color: Color(0xffFF512C),
                             )),
                       ],
                     ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
-                          flex: 6,
+                          flex: 9,
                           child: Container(
                             width: 280,
                             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -319,7 +320,7 @@ class _DetailPageState extends State<DetailPage> {
                             )),
                         (!isLoading)
                             ? Expanded(
-                                flex: 2,
+                                flex: 1,
                                 child: Container(
                                   margin: const EdgeInsets.only(top: 16),
                                   child: Text.rich(
@@ -354,7 +355,7 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                               )
                             : Expanded(
-                                flex: 2,
+                                flex: 1,
                                 child:
                                     SpinKitThreeBounce(color: Colors.redAccent),
                               ),
@@ -379,7 +380,7 @@ class _DetailPageState extends State<DetailPage> {
 
               // Screenshots
               Container(
-                height: MediaQuery.of(context).size.height / 3,
+                height: MediaQuery.of(context).size.height / 2,
                 color: Color(int.parse(
                     '0xff${widget.dominantColors.isNotEmpty ? widget.dominantColors[2] : defaultColors[0]}')),
                 child: ImagesScrollView(screenShots: widget.screenShots),
@@ -610,40 +611,49 @@ Widget gameInfoWidget(context, gameInfo, riURL, descrips) {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width / 3.5,
-                        child: Column(
-                          children: [
-                            SvgPicture.network(
-                              gameInfo?.spMode[0]?.item1,
-                              fit: BoxFit.contain,
-                            ),
-                            Text(gameInfo?.spMode[0]?.item2),
-                          ],
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 3.5,
+                          child: Column(
+                            children: [
+                              SvgPicture.network(
+                                gameInfo?.spMode[0]?.item1,
+                                fit: BoxFit.contain,
+                              ),
+                              Text(gameInfo?.spMode[0]?.item2),
+                            ],
+                          ),
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width / 3.5,
-                        child: Column(
-                          children: [
-                            SvgPicture.network(
-                              gameInfo?.spMode[1]?.item1,
-                              fit: BoxFit.contain,
-                            ),
-                            Text(gameInfo?.spMode[1]?.item2),
-                          ],
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 3.5,
+                          child: Column(
+                            children: [
+                              SvgPicture.network(
+                                gameInfo?.spMode[1]?.item1,
+                                fit: BoxFit.contain,
+                              ),
+                              Text(gameInfo?.spMode[1]?.item2),
+                            ],
+                          ),
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width / 3.5,
-                        child: Column(
-                          children: [
-                            SvgPicture.network(
-                              gameInfo?.spMode[2]?.item1,
-                              fit: BoxFit.contain,
-                            ),
-                            Text(gameInfo?.spMode[2]?.item2),
-                          ],
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width / 3.5,
+                          child: Column(
+                            children: [
+                              SvgPicture.network(
+                                gameInfo?.spMode[2]?.item1,
+                                fit: BoxFit.contain,
+                              ),
+                              Text(gameInfo?.spMode[2]?.item2),
+                            ],
+                          ),
                         ),
                       ),
                     ],
@@ -655,6 +665,7 @@ Widget gameInfoWidget(context, gameInfo, riURL, descrips) {
               height: 18,
             ),
             Container(
+                // height: MediaQuery.of(context).size.height / 2,
                 width: MediaQuery.of(context).size.width - padding,
                 color: Colors.black12,
                 padding: const EdgeInsets.all(16),
@@ -675,7 +686,7 @@ Widget gameInfoWidget(context, gameInfo, riURL, descrips) {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
-                          flex: 3,
+                          flex: 1,
                           child: Container(
                             padding: const EdgeInsets.all(16),
                             child: Image.network(
@@ -685,7 +696,7 @@ Widget gameInfoWidget(context, gameInfo, riURL, descrips) {
                           ),
                         ),
                         Expanded(
-                          flex: 7,
+                          flex: 5,
                           child: Container(
                             child: Text(
                               descrips.isEmpty
@@ -803,12 +814,14 @@ class _ImagesScrollViewState extends State<ImagesScrollView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      child:
+          Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
         Row(
           children: <Widget>[
-            Expanded(
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height / 3.5,
+            Flexible(
+              flex: 8,
+              child: Container(
+                height: MediaQuery.of(context).size.height / 2.5,
                 child: new PageView.builder(
                   controller: _controller,
                   scrollDirection: Axis.horizontal,
@@ -821,27 +834,22 @@ class _ImagesScrollViewState extends State<ImagesScrollView> {
                   itemBuilder: (BuildContext ctxt, int index) {
                     return Container(
                       // padding: const EdgeInsets.symmetric(horizontal: 0),
-                      child: Column(
-                        children: [
-                          Hero(
-                            tag: 'image-$index',
-                            child: Card(
-                              child: InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ImageView(
-                                            index: index,
-                                            imageUrl:
-                                                widget.screenShots[index])),
-                                  );
-                                },
-                                child: Image.network(widget.screenShots[index]),
-                              ),
-                            ),
+                      child: Hero(
+                        tag: 'image-$index',
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ImageView(
+                                      index: index,
+                                      imageUrl: widget.screenShots[index])),
+                            );
+                          },
+                          child: Image.network(
+                            widget.screenShots[index],
                           ),
-                        ],
+                        ),
                       ),
                     );
                   },
@@ -850,15 +858,18 @@ class _ImagesScrollViewState extends State<ImagesScrollView> {
             ),
           ],
         ),
-        SmoothPageIndicator(
-          controller: _controller,
-          count: widget.screenShots.length,
-          effect: ScrollingDotsEffect(
-              spacing: 10,
-              radius: 8.0,
-              dotWidth: 50.0,
-              activeDotScale: .5,
-              activeDotColor: Colors.white),
+        Flexible(
+          flex: 3,
+          child: SmoothPageIndicator(
+            controller: _controller,
+            count: widget.screenShots.length,
+            effect: ScrollingDotsEffect(
+                spacing: 10,
+                radius: 8.0,
+                dotWidth: 50.0,
+                activeDotScale: .5,
+                activeDotColor: Colors.white),
+          ),
         ),
       ]),
     );

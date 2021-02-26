@@ -280,8 +280,9 @@ Future<GameInfo> fetchGameInfo(uid) async {
   var noP = false;
 
   ///// Check if Publisher existed.
+  String d;
   try {
-    var d = document.getElementsByClassName('publisher').first.text;
+    d = document.getElementsByClassName('publisher').first.text;
     // print(d);
   } catch (e) {
     // print(detailUrl);

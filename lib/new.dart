@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:neshop/detail.dart';
 import 'package:neshop/provider/newProvider.dart';
 import 'package:neshop/utils/dateFormat.dart';
@@ -88,10 +87,10 @@ class NewPageState extends State<NewPage> {
               ? Center(child: CircularProgressIndicator())
               : GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 4.0,
-                    mainAxisSpacing: 4.0,
-                  ),
+                      crossAxisCount: 4,
+                      crossAxisSpacing: 4.0,
+                      mainAxisSpacing: 4.0,
+                      childAspectRatio: 1.3),
                   itemCount: gameList.length,
                   itemBuilder: (context, index) {
                     return Container(
@@ -109,7 +108,6 @@ class NewPageState extends State<NewPage> {
                             gameList[index].descriptors),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               Container(
                                 child: ClipRRect(

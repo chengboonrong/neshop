@@ -118,6 +118,7 @@ class _SettingsState extends State<Settings> {
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 10,
+                vertical: 10,
               ),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -180,24 +181,20 @@ class _SettingsState extends State<Settings> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'Version',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    'v $version',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+                    'version v$version',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),
             ),
-            Container(
-              height: 2,
-              width: MediaQuery.of(context).size.width,
-              color: Colors.black12,
-            ),
+            // Container(
+            //   height: 2,
+            //   width: MediaQuery.of(context).size.width,
+            //   color: Colors.black12,
+            // ),
           ],
         ),
       ),

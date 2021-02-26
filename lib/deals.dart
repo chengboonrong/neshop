@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:neshop/detail.dart';
 import 'package:neshop/utils/game.dart';
 import 'package:neshop/utils/fetch.dart';
@@ -74,10 +73,10 @@ class DealsPageState extends State<DealsPage> {
               ? Center(child: CircularProgressIndicator())
               : GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 4.0,
-                    mainAxisSpacing: 4.0,
-                  ),
+                      crossAxisCount: 4,
+                      crossAxisSpacing: 4.0,
+                      mainAxisSpacing: 4.0,
+                      childAspectRatio: 1.3),
                   itemCount: gameList.length,
                   itemBuilder: (context, index) {
                     return Container(
